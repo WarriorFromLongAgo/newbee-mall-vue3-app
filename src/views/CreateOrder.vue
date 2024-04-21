@@ -51,8 +51,8 @@
       @close="close"
     >
       <div :style="{ width: '90%', margin: '0 auto', padding: '50px 0' }">
-        <van-button :style="{ marginBottom: '10px' }" color="#1989fa" block @click="handlePayOrder(1)">支付宝支付</van-button>
-        <van-button color="#4fc08d" block @click="handlePayOrder(2)">微信支付</van-button>
+        <van-button :style="{ marginBottom: '10px' }" color="#1989fa" block @click="handlePayOrder(1, total)">支付宝支付</van-button>
+        <van-button color="#4fc08d" block @click="handlePayOrder(2, total)">微信支付</van-button>
       </div>
     </van-popup>
   </div>
@@ -63,7 +63,7 @@ import { reactive, onMounted, computed } from 'vue'
 import sHeader from '@/components/SimpleHeader.vue'
 import { getByCartItemIds } from '@/service/cart'
 import { getDefaultAddress, getAddressDetail } from '@/service/address'
-import { createOrder, payOrder } from '@/service/order'
+import { createOrder, pay } from '@/service/order'
 import { setLocal, getLocal } from '@/common/js/utils'
 import { showLoadingToast, closeToast, showSuccessToast } from 'vant'
 import { useRoute, useRouter } from 'vue-router'
@@ -120,11 +120,14 @@ const close = () => {
   router.push({ path: '/order' })
 }
 
-const handlePayOrder = async (type) => {
-  await payOrder({ orderNo: state.orderNo, payType: type })
+const handlePayOrder = async (type, totalMoney) => {
+  const url = await pay({ orderNo: state.orderNo, payType: type, originalPrice: totalMoney })
   showSuccessToast('支付成功')
   setTimeout(() => {
-    router.push({ path: '/order' })
+    // router.push({ path: '/order' })
+    // 打开支付链接
+    console.log("url ", url)
+    window.open(url, '_blank');
   }, 2000)
 }
 

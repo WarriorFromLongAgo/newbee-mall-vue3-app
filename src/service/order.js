@@ -10,29 +10,41 @@
 import axios from '../utils/axios'
 
 export function createOrder(params) {
-  return axios.post('/saveOrder', params);
+    return axios.post('/saveOrder', params);
 }
 
 export function getOrderList(params) {
-  return axios.get('/order', { params });
+    return axios.get('/order', {params});
 }
 
 export function getOrderDetail(id) {
-  return axios.get(`/order/${id}`);
+    return axios.get(`/order/${id}`);
 }
 
 export function cancelOrder(id) {
-  return axios.put(`/order/${id}/cancel`);
+    return axios.put(`/order/${id}/cancel`);
 }
 
 export function confirmOrder(id) {
-  return axios.put(`/order/${id}/finish`)
+    return axios.put(`/order/${id}/finish`)
 }
 
 export function payOrder(params) {
-  return axios.get('/paySuccess', { params })
+    return axios.get('/paySuccess', {params})
 }
 
+export function pay(params) {
+    // 返回 Axios post 方法的 Promise 对象
+    return axios.post('/pay', params)
+        .then(response => {
+            // 从响应中提取 URL 字符串并返回
+            return response.data;
+        })
+        .catch(error => {
+            // 如果请求失败，则抛出错误
+            throw error;
+        });
+}
 
 
 
